@@ -13,7 +13,6 @@ parser = Parser.new
 collector = Collector.new
 turn = Turn.new
 
-
 txt = reader.read
 
 words = parser.parse(txt)
@@ -28,9 +27,17 @@ def take_a_guess
   return guess
 end
 
+def errored_out?
+  board.errors != 7
+end
+
+def game_over?
+  errored_out? && board.is_word_unsolved?
+end
+
 while board.is_word_unsolved?
   puts ''
-  puts "guesses: #{board.wrong_guesses} word: #{board.board.join}  turn: #{turn.turn} errors: #{board.errors}"
+  puts "guesses: #{board.wrong_guesses} word: #{board.board.join}  turn: #{turn.turn} errors: #{board.errors}/7"
   guess = take_a_guess
   if board.is_guess_in_word?(guess)
     board.update_board(guess)
