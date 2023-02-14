@@ -56,6 +56,24 @@ class Main
       @board.add_guess(guess)
       @turn.increment_turn
     end
+    win_lose_message
+  end
+
+  def won?
+    errored_out? && !@board.is_word_unsolved?
+  end
+
+  def lost?
+    !game_not_over?
+  end
+
+  def win_lose_message
+    puts ''
+    if won?
+      puts 'Congratulations, you guessed it!'
+    else
+      puts "The word was #{@board.word.join}. Better luck next time."
+    end
   end
 end
 
