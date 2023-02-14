@@ -5,7 +5,7 @@ require_relative './selector'
 require_relative './collector'
 require_relative './parser'
 require_relative './turn'
-require_relative './word_manager'
+require_relative './board'
 
 reader = Reader.new
 selector = Selector.new
@@ -20,7 +20,7 @@ words = parser.parse(txt)
 words = collector.collect(words)
 word = selector.select(words)
 
-manager = WordManager.new(word)
+board = Board.new(word)
   
 def take_a_guess
   print 'guess: '
@@ -28,13 +28,13 @@ def take_a_guess
   return guess
 end
 
-while manager.is_word_unsolved?
+while board.is_word_unsolved?
   puts ''
-  puts "guesses: #{manager.wrong_guesses} word: #{manager.board.join}  turn: #{turn.turn}"
+  puts "guesses: #{board.wrong_guesses} word: #{board.board.join}  turn: #{turn.turn} errors: #{board.errors}"
   guess = take_a_guess
-  if manager.is_guess_in_word?(guess)
-    manager.update_board(guess)
+  if board.is_guess_in_word?(guess)
+    board.update_board(guess)
   end
-  manager.add_guess(guess)
+  board.add_guess(guess)
   turn.increment_turn
 end

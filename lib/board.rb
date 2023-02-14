@@ -1,5 +1,5 @@
 
-class WordManager
+class Board
   attr_accessor :word, :board, :wrong_guesses
   
   def initialize(word)
@@ -27,5 +27,9 @@ class WordManager
 
   def add_guess(char)
     @wrong_guesses.concat(char) unless is_guess_in_word?(char)
+  end
+
+  def errors
+    @wrong_guesses.length
   end
 end
