@@ -8,8 +8,8 @@ describe Reader do
 
   describe '#read' do
     it 'reads the txt file' do
-      # allow(File).to receive(:read).with(file)
       expect(reader.read.split.first).to eq('the')
+      expect(reader.read.split.last).to eq('poison')
     end
   end
 end
