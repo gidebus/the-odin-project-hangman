@@ -44,4 +44,22 @@ describe WordManager do
       expect(manager.is_word_unsolved?).to eq(true)
     end
   end
+
+  describe '#add_guesses' do
+    it 'adds the incorrect guesses' do
+      guess = 'a'
+      manager.add_guess(guess)
+      expect(manager.wrong_guesses).to eq('a')
+
+      second_guess = 'b'
+      manager.add_guess(second_guess)
+      expect(manager.wrong_guesses).to eq('ab')
+    end
+
+    it 'does not add correct guesses' do
+      correct_guess = 't'
+      manager.add_guess(correct_guess)
+      expect(manager.wrong_guesses).to eq('')
+    end
+  end
 end

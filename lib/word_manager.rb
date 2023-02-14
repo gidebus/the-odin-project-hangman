@@ -1,11 +1,11 @@
-# frozen_string_literal: true
 
 class WordManager
-  attr_accessor :word, :board
+  attr_accessor :word, :board, :wrong_guesses
   
   def initialize(word)
     @word = word.split('')
     @board = Array.new(word.length, '.')
+    @wrong_guesses = ''
   end
 
   def is_guess_in_word?(char)
@@ -23,5 +23,9 @@ class WordManager
       end
     end
     return @board
+  end
+
+  def add_guess(char)
+    @wrong_guesses.concat(char) unless is_guess_in_word?(char)
   end
 end
