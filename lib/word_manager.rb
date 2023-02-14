@@ -12,6 +12,10 @@ class WordManager
     @word.include?(char)
   end
 
+  def is_word_unsolved?
+    @board.include?('.')
+  end
+
   def update_board(guess)
     @word.each_with_index do |char, index|
       if char == guess

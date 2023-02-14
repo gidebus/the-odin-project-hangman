@@ -38,4 +38,10 @@ describe WordManager do
       expect(manager.update_board(char)).to eq(expected)
     end
   end
+
+  describe '#is_word_unsolved?' do
+    it 'returns true if board remains unsolved' do
+      expect(manager.is_word_unsolved?).to eq(true)
+    end
+  end
 end
