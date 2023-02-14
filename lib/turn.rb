@@ -3,7 +3,7 @@
 class Turn 
   attr_accessor :turn
 
-  def initialize(turn = 0)
+  def initialize(turn = 1)
     @turn = turn
   end
 
