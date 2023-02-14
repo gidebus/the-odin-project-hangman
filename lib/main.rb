@@ -4,11 +4,15 @@ require_relative './reader'
 require_relative './selector'
 require_relative './collector'
 require_relative './parser'
+require_relative './turn'
+require_relative './word_manager'
 
 reader = Reader.new
 selector = Selector.new
 parser = Parser.new
 collector = Collector.new
+turn = Turn.new
+
 
 txt = reader.read
 
@@ -16,39 +20,21 @@ words = parser.parse(txt)
 words = collector.collect(words)
 word = selector.select(words)
 
-
-word_size = word.length
-word = word.split('')
-fake_word =  Array.new(word_size, '.')
+manager = WordManager.new(word)
   
 def take_a_guess
-  puts 'guess:'
-  guess = gets.chomp
+  print 'guess: '
+  guess = gets.chomp.downcase
   return guess
 end
 
-  # if word.include?(guess)
-  #   word.each_with_index do |char, index|
-  #     if char == guess
-  #       fake_word[index] = char
-  #     end
-  #   end
-  #   p fake_word
-  # end
-
-while true
-  if fake_word.include?('.')
-    guess = take_a_guess
-    if word.include?(guess)
-      word.each_with_index do |char, index|
-        if char == guess
-          fake_word[index] = char
-        end
-      end
-    end
-  else
-    break
+while manager.is_word_unsolved?
+  puts ''
+  puts "guesses: #{manager.wrong_guesses} word: #{manager.board.join}  turn: #{turn.turn}"
+  guess = take_a_guess
+  if manager.is_guess_in_word?(guess)
+    manager.update_board(guess)
   end
-  p word
-  p fake_word
+  manager.add_guess(guess)
+  turn.increment_turn
 end
