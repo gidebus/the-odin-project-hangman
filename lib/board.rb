@@ -2,10 +2,27 @@
 class Board
   attr_accessor :word, :board, :wrong_guesses
   
-  def initialize(word)
+  def initialize(word, board = Array.new(word.length, '.'), wrong_guesses = '')
     @word = word.split('')
-    @board = Array.new(word.length, '.')
-    @wrong_guesses = ''
+    @board = board
+    @wrong_guesses = wrong_guesses
+  end
+
+  def to_json
+    JSON.dump({
+      :word => @word,
+      :board => @board,
+      :wrong_guesses => @wrong_guesses
+    })
+  end
+
+  def self.from_json(string)
+    data = JSON.load(string)
+    self.new(
+      data['word'].join(''),
+      data['board'],
+      data['wrong_guesses']
+    )
   end
 
   def is_guess_in_word?(char)
