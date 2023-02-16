@@ -7,6 +7,8 @@ require_relative './parser'
 require_relative './turn'
 require_relative './board'
 
+require 'json'
+
 class Game
   def initialize(
     reader = Reader.new,
@@ -21,7 +23,61 @@ class Game
     @parser = parser
     @collector = collector
     @turn = turn
-    @board = nil
+    @board = board
+  end
+
+  def to_json
+    JSON.dump ({
+      'reader' => @reader,
+      'selector' => @selector,
+      'parser' => @parser,
+      'collector' => @collector,
+      'turn' => @turn.to_json,
+      'board' => @board.to_json
+    })
+  end
+
+  def self.from_json(string)
+    data = JSON.load(string)
+    self.new(
+      Reader.new,
+      Selector.new,
+      Parser.new,
+      Collector.new,
+      Turn.from_json(data['turn']),
+      Board.from_json(data['board'])
+    )
+
+  end
+
+  def write_file
+    Dir.mkdir('saved') unless Dir.exist?('saved')
+    puts 'name the game file'
+    file_name = gets.chomp
+    file_name = "saved/#{file_name}.json"
+
+    File.open(file_name, 'w') do |filename|
+      filename.write to_json 
+    end
+
+    puts file_name
+  end
+
+  def would_you_like_to_save
+    puts 'would you like to save? y/n'
+    input = gets.chomp.downcase
+    until input == 'y' || input == 'n'
+      would_you_like_to_save
+    end
+    write_file if input == 'y'
+  end
+
+  def self.load_game
+    puts 'choose file to load'
+    filename = gets.chomp.downcase
+    saved = File.read("saved/#{filename}")
+    game = Game.from_json(saved)
+    game
   end
 
   def setup_board
@@ -47,14 +103,14 @@ class Game
 
   def start_game
     while game_not_over?
-      puts ''
-      puts "guesses: #{@board.wrong_guesses} word: #{@board.board.join}  turn: #{@turn.turn} errors: #{@board.errors}/7"
+      puts " \n guesses: #{@board.wrong_guesses} word: #{@board.board.join}  turn: #{@turn.turn} errors: #{@board.errors}/7"
       guess = take_a_guess
       if @board.is_guess_in_word?(guess)
         @board.update_board(guess)
       end
       @board.add_guess(guess)
       @turn.increment_turn
+      would_you_like_to_save
     end
     win_lose_message
   end
@@ -68,9 +124,8 @@ class Game
   end
 
   def win_lose_message
-    puts ''
     if won?
-      puts 'Congratulations, you guessed it!'
+      puts "\n Congratulations, you guessed it!"
     else
       puts "The word was #{@board.word.join}. Better luck next time."
     end
