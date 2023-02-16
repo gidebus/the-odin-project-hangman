@@ -2,7 +2,11 @@
 class Board
   attr_accessor :word, :board, :wrong_guesses
   
-  def initialize(word, board = Array.new(word.length, '.'), wrong_guesses = '')
+  def initialize(
+    word, 
+    board = Array.new(word.length, '.'), 
+    wrong_guesses = ''
+  )
     @word = word.split('')
     @board = board
     @wrong_guesses = wrong_guesses

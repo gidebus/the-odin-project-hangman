@@ -1,0 +1,1 @@
+{"reader":"#<Reader:0x0000000100810208>","selector":"#<Selector:0x000000010080b910>","parser":"#<Parser:0x000000010080b780>","collector":"#<Collector:0x000000010080b690>","turn":"{\"turn\":11}","board":"{\"word\":[\"n\",\"e\",\"t\",\"s\",\"c\",\"a\",\"p\",\"e\"],\"board\":[\"n\",\"e\",\"t\",\".\",\".\",\"a\",\".\",\"e\"],\"wrong_guesses\":\"iourml\"}"}

@@ -47,9 +47,9 @@ class Game
       Turn.from_json(data['turn']),
       Board.from_json(data['board'])
     )
-
   end
 
+  # TODO: move to writer class
   def write_file
     Dir.mkdir('saved') unless Dir.exist?('saved')
     puts 'name the game file'
@@ -63,6 +63,7 @@ class Game
     puts file_name
   end
 
+  # TODO: move to game_manager class
   def would_you_like_to_save
     puts 'would you like to save? y/n'
     input = gets.chomp.downcase
@@ -72,6 +73,7 @@ class Game
     write_file if input == 'y'
   end
 
+  # TODO: move to game_manager class
   def self.load_game
     puts 'choose file to load'
     filename = gets.chomp.downcase
@@ -101,13 +103,17 @@ class Game
     errored_out? && @board.is_word_unsolved?
   end
 
+  def update_board_if_correct(guess)
+    if @board.is_guess_in_word?(guess)
+      @board.update_board(guess)
+    end
+  end
+
   def start_game
     while game_not_over?
       puts " \n guesses: #{@board.wrong_guesses} word: #{@board.board.join}  turn: #{@turn.turn} errors: #{@board.errors}/7"
       guess = take_a_guess
-      if @board.is_guess_in_word?(guess)
-        @board.update_board(guess)
-      end
+      update_board_if_correct(guess)
       @board.add_guess(guess)
       @turn.increment_turn
       would_you_like_to_save
